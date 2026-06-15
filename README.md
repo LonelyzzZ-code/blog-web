@@ -1,6 +1,6 @@
 # Blog Web
 
-基于 **Vue 3 + TypeScript + Vite** 的博客前端，对接 blog-api 后端。
+基于 **Vue 3 + TypeScript + Vite** 的博客前端，对接 [blog-api](https://github.com/LonelyzzZ-code/blog-api) 后端。
 
 ## 技术栈
 

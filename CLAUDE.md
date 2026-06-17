@@ -57,7 +57,7 @@
 - **路由**: Vue Router 4（history 模式）
 - **HTTP 请求**: Axios
 - **构建工具**: Vite 5
-- **后端对接**: blog-api（FastAPI，运行在 localhost:8000）
+- **后端项目**: blog-api（FastAPI），路径 `E:\My_code\blog-api`，运行在 `localhost:8000`
 
 ## 项目结构
 
@@ -123,5 +123,5 @@ npm run preview
 
 - Vite proxy 只在开发环境生效，生产环境需 Nginx 反向代理
 - 确保后端 `uvicorn` 先启动，前端才能拿到数据
-- 代码生成参考：`blog-web-代码生成指南.txt`，生成/修改任何文件前先对照该指南
+- 代码生成参考：`blog-web-代码生成指南.md`，生成/修改任何文件前先对照该指南
 - 全程用中文回复

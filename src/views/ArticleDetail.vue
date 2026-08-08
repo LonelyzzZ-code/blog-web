@@ -7,7 +7,7 @@
     <article>
       <h1>{{ article.title }}</h1>
       <div class="meta">
-        {{ article.created_at }} · {{ article.views }} 次阅读 · {{ article.comment_count }} 条评论
+        {{ formatDate(article.created_at) }} · {{ article.views }} 次阅读 · {{ article.comment_count }} 条评论
       </div>
       <div class="content" v-html="article.content"></div>
     </article>
@@ -34,7 +34,7 @@
         >
           <div class="comment-header">
             <strong>{{ item.author }}</strong>
-            <span>{{ item.created_at }}</span>
+            <span>{{ formatDate(item.created_at) }}</span>
           </div>
           <p>{{ item.content }}</p>
           <button class="like-btn" @click="handleLike(item.id)">
@@ -54,6 +54,7 @@ import { useRoute } from 'vue-router'
 import { getArticle } from '../api/articles'
 import { getComments, createComment, likeComment } from '../api/comments'
 import type { Article, Comment } from '../types'
+import { formatDate } from '../utils/format'
 
 const route = useRoute()
 const articleId = Number(route.params.id)

@@ -2,7 +2,7 @@ import client from './client'
 import type { Article, ArticleListResponse } from '../types'
 
 export async function getArticles(page = 1, pageSize = 10): Promise<ArticleListResponse> {
-  const { data } = await client.get('/api/articles', {
+  const { data } = await client.get('/api/articles/', {
     params: { page, page_size: pageSize },
   })
   return data

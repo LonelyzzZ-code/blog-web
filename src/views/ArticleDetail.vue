@@ -9,6 +9,12 @@
       <div class="meta">
         {{ formatDate(article.created_at) }} · {{ article.views }} 次阅读 · {{ article.comment_count }} 条评论
       </div>
+      <div class="actions">
+        <router-link :to="`/article/${article.id}/edit`" class="edit-btn">✏️ 编辑</router-link>
+        <button class="delete-btn" @click="handleDelete" :disabled="deleting">
+          {{ deleting ? '删除中...' : '🗑️ 删除' }}
+        </button>
+      </div>
       <div class="content" v-html="article.content"></div>
     </article>
 
@@ -50,13 +56,14 @@
 </template>
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
-import { getArticle } from '../api/articles'
+import { useRoute, useRouter } from 'vue-router'
+import { getArticle, deleteArticle } from '../api/articles'
 import { getComments, createComment, likeComment } from '../api/comments'
 import type { Article, Comment } from '../types'
 import { formatDate } from '../utils/format'
 
 const route = useRoute()
+const router = useRouter()
 const articleId = Number(route.params.id)
 const loading = ref(true)
 const error = ref('')
@@ -64,6 +71,7 @@ const article = ref<Article | null>(null)
 const comments = ref<Comment[]>([])
 const loadingComments = ref(false)
 const submitting = ref(false)
+const deleting = ref(false)
 const form = ref({ author: '', content: '' })
 
 //1.加载文章
@@ -122,7 +130,21 @@ async function handleLike(commentId: number) {
   }
 }
 
-//5.生命周期
+//5.删除文章
+async function handleDelete() {
+  if (!confirm('确定要删除这篇文章吗？此操作不可恢复。')) return
+
+  deleting.value = true
+  try {
+    await deleteArticle(articleId)
+    router.push('/')
+  } catch (e: any) {
+    alert('删除失败：' + (e.message || '请重试'))
+    deleting.value = false
+  }
+}
+
+//6.生命周期
 onMounted(() => {
   loadArticle()
   loadComments()
@@ -145,6 +167,39 @@ article h1 {
 .content {
   line-height: 1.8;
   font-size: 16px;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+.edit-btn {
+  padding: 4px 14px;
+  background: #f0f0f0;
+  color: #333;
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 13px;
+}
+.edit-btn:hover {
+  background: #e0e0e0;
+}
+.delete-btn {
+  padding: 4px 14px;
+  background: none;
+  color: #e74c3c;
+  border: 1px solid #e74c3c;
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.delete-btn:hover {
+  background: #e74c3c;
+  color: white;
+}
+.delete-btn:disabled {
+  opacity: 0.5;
 }
 
 .comments {

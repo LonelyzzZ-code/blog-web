@@ -1,9 +1,15 @@
 <template>
-  <div></div>
+  <div id = "app">
+    <header>
+      <router-link to="/">📝 我的博客😅😨🤣</router-link>
+    </header>
+    <main>
+      <router-view />
+    </main>
+  </div>
 </template>
 
-<script lang="ts">
-</script>
+<script lang="ts"></script>
 
 <style scoped>
 header {

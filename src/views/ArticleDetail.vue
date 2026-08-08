@@ -1,5 +1,9 @@
 <template>
-  <div class="article-detail" v-if="article">
+  <div v-if="loading" class="loading">文章加载中...</div>
+
+  <div v-else-if="error" class="error">{{ error }}</div>
+
+  <div class="article-detail" v-else-if="article">
     <article>
       <h1>{{ article.title }}</h1>
       <div class="meta">
@@ -13,8 +17,35 @@
     <section class="comments">
       <h3>评论({{ comments.length }})</h3>
 
-      <form></form>
-    </section>
+      <form class="comment-form" @submit.prevent="handleComment">
+          <input v-model="form.author" placeholder="你的名字" />
+          <textarea v-model="form.content" placeholder="写评论..." rows="3"></textarea>
+          <button type="submit" :disabled="submitting">
+            {{ submitting ? '提交中...' : '发表评论' }}
+          </button>
+        </form>
+
+        <div v-if="loadingComments" class="loading">评论加载中...</div>
+
+        <div
+          v-for="item in comments"
+          :key="item.id"
+          class="comment-item"
+        >
+          <div class="comment-header">
+            <strong>{{ item.author }}</strong>
+            <span>{{ item.created_at }}</span>
+          </div>
+          <p>{{ item.content }}</p>
+          <button class="like-btn" @click="handleLike(item.id)">
+            👍 {{ item.likes }}
+          </button>
+        </div>
+
+        <div v-if="!loadingComments && comments.length === 0" class="empty">
+          暂无评论，来写第一条吧
+        </div>
+      </section>
   </div>
 </template>
 <script setup lang="ts">
